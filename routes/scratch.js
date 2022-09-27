@@ -52,8 +52,11 @@ router.post("/create", async (req, res) => {
         waitUntil: "networkidle0",
       });
 
+      console.log(page2.url);
+
       await delay(1000);
     })();
+    return;
   } catch (err) {
     console.log(err);
     res.status(500).send(err.message);
