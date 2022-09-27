@@ -28,7 +28,7 @@ router.post("/create", async (req, res) => {
 
     const createTemplate = async () => {
       const browser = await puppeteer.launch({
-        headless: true,
+        headless: false,
         args: ["--single-process", "--no-sandbox", "--disable-setuid-sandbox"],
       });
 
@@ -40,7 +40,7 @@ router.post("/create", async (req, res) => {
       await page.type("input[name=username]", userCredentials.username);
       await page.type("input[name=password]", userCredentials.password);
       await page.keyboard.press("Enter");
-      await delay(1000);
+      await delay(3000);
 
       const page2 = await browser.newPage();
       await page2.setViewport({ width: 1366, height: 768 });
@@ -48,13 +48,13 @@ router.post("/create", async (req, res) => {
         waitUntil: "networkidle2",
       });
 
-      await delay(1000);
+      await delay(3000);
 
       await page2.click(".remix-button", {
         waitUntil: "networkidle0",
       });
 
-      console.log(page2.url);
+      // console.log(page2.url);
 
       await delay(1000);
       await browser.close();
