@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const path = require("path");
+const cookieParser = require("cookie-parser");
 
 // Import routes
 const scratchRoute = require("./routes/scratch");
@@ -8,6 +9,7 @@ const scratchRoute = require("./routes/scratch");
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded());
+app.use(cookieParser());
 
 app.use("/api/scratch", scratchRoute);
 
