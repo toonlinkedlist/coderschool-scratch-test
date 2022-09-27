@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const puppeteer = require("puppeteer");
+const chromium = require("chromium");
+const { execFile } = require("child_process");
 
 const getCredentials = (fullName) => {
   const splitName = fullName.split(" ");
@@ -23,46 +25,49 @@ function delay(time) {
 // @access Public
 router.post("/create", async (req, res) => {
   try {
-    const fullName = req.body.fullName;
-    let userCredentials = getCredentials(fullName);
+    execFile(chromium.path, ["https://google.com"], (err) => {
+      console.log("Hello Google!");
+    });
+    // const fullName = req.body.fullName;
+    // let userCredentials = getCredentials(fullName);
 
-    // (async () => {
-    const createTemplate = async () => {
-      const browser = await puppeteer.launch({
-        // headless: false,
-        args: ["--single-process", "--no-sandbox", "--disable-setuid-sandbox"],
-      });
+    // const createTemplate = async () => {
+    //   const browser = await puppeteer.launch({
+    //     headless: false,
+    //     args: ["--single-process", "--no-sandbox", "--disable-setuid-sandbox"],
+    //   });
 
-      const page = await browser.newPage();
-      await page.setViewport({ width: 1366, height: 768 });
+    //   const page = await browser.newPage();
+    //   await page.setViewport({ width: 1366, height: 768 });
 
-      await page.goto("https://scratch.mit.edu", { waitUntil: "networkidle2" });
-      await page.click(".ignore-react-onclickoutside");
-      await page.type("input[name=username]", userCredentials.username);
-      await page.type("input[name=password]", userCredentials.password);
-      await page.keyboard.press("Enter");
-      await delay(1000);
+    //   await page.goto("https://scratch.mit.edu", { waitUntil: "networkidle2" });
+    //   await page.click(".ignore-react-onclickoutside");
+    //   await page.type("input[name=username]", userCredentials.username);
+    //   await page.type("input[name=password]", userCredentials.password);
+    //   await page.keyboard.press("Enter");
+    //   await delay(1000);
 
-      const page2 = await browser.newPage();
-      await page2.setViewport({ width: 1366, height: 768 });
-      await page2.goto("https://scratch.mit.edu/projects/716058312/", {
-        waitUntil: "networkidle2",
-      });
+    //   const page2 = await browser.newPage();
+    //   await page2.setViewport({ width: 1366, height: 768 });
+    //   await page2.goto("https://scratch.mit.edu/projects/716058312/", {
+    //     waitUntil: "networkidle2",
+    //   });
 
-      await page2.click(".remix-button", {
-        waitUntil: "networkidle0",
-      });
+    //   await delay(1000);
 
-      console.log(page2.url);
+    //   await page2.click(".remix-button", {
+    //     waitUntil: "networkidle0",
+    //   });
 
-      await delay(1000);
-      await browser.close();
-    };
-    // })();
+    //   console.log(page2.url);
 
-    await createTemplate();
+    //   await delay(1000);
+    //   await browser.close();
+    // };
 
-    return;
+    // await createTemplate();
+
+    return res.json("Template created");
   } catch (err) {
     console.log(err);
     res.status(500).send(err.message);
