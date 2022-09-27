@@ -29,8 +29,8 @@ router.post("/create", async (req, res) => {
     // (async () => {
     const createTemplate = async () => {
       const browser = await puppeteer.launch({
-        headless: false,
-        args: ["--single-process", "--no-sandbox"],
+        // headless: false,
+        args: ["--single-process", "--no-sandbox", "--disable-setuid-sandbox"],
       });
 
       const page = await browser.newPage();
