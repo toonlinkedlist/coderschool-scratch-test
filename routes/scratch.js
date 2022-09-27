@@ -29,6 +29,7 @@ router.post("/create", async (req, res) => {
     (async () => {
       const browser = await puppeteer.launch({
         headless: false,
+        args: ["--single-process"],
       });
 
       const page = await browser.newPage();
