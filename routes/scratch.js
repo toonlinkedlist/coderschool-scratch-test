@@ -26,7 +26,8 @@ router.post("/create", async (req, res) => {
     const fullName = req.body.fullName;
     let userCredentials = getCredentials(fullName);
 
-    (async () => {
+    // (async () => {
+    const createTemplate = async () => {
       const browser = await puppeteer.launch({
         headless: false,
         args: ["--single-process", "--no-sandbox"],
@@ -55,7 +56,12 @@ router.post("/create", async (req, res) => {
       console.log(page2.url);
 
       await delay(1000);
-    })();
+      await browser.close();
+    };
+    // })();
+
+    await createTemplate();
+
     return;
   } catch (err) {
     console.log(err);
