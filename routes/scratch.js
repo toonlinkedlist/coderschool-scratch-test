@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const puppeteer = require("puppeteer");
-const chromium = require("chromium");
-const { execFile } = require("child_process");
 
 const getCredentials = (fullName) => {
   const splitName = fullName.split(" ");
