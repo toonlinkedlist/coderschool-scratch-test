@@ -1,22 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import axios from "axios";
+import "./App.css";
+import React, { useState, useEffect } from "react";
 
 function App() {
+  const [fullName, setFullName] = useState("");
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    axios.post("/api/scratch/create", { fullName }).then((res) => {
+      console.log(res);
+    });
+  };
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <p>Testing Scratch template creation</p>
+        <input
+          type="text"
+          value={fullName}
+          onChange={(e) => setFullName(e.target.value)}
+          placeholder="Enter full name"
+          style={{ marginBottom: "10px" }}
+        ></input>
+        <button className="btn" onClick={(e) => onSubmit(e)}>
+          Test
+        </button>
       </header>
     </div>
   );
