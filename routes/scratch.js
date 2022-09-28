@@ -35,6 +35,7 @@ router.post("/create", async (req, res) => {
       output: "json",
     };
 
+    // Chromium must be no older than Chrome stable
     const chrome = await chromeLauncher.launch(opts);
     opts.port = chrome.port;
 
