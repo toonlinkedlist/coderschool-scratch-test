@@ -1,7 +1,6 @@
 import axios from "axios";
+import "./App.css";
 import React, { useState, useEffect } from "react";
-
-// commenting
 
 function App() {
   const [fullName, setFullName] = useState("");
