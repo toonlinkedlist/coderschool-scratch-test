@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 
-// comment
+// commenting
 
 function App() {
   const [fullName, setFullName] = useState("");
