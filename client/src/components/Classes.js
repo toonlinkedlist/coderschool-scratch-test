@@ -48,6 +48,16 @@ function Classes() {
     return hours + ":" + minutes + " " + ampm;
   }
 
+  const getStudentNames = (e) => {
+    e.preventDefault();
+    const studentList = e.target.parentElement.childNodes[1].childNodes;
+    let students = [];
+
+    studentList.forEach((student) => {
+      console.log(student.innerHTML);
+    });
+  };
+
   useEffect(() => {
     console.log(schedule);
   }, [schedule]);
@@ -125,8 +135,11 @@ function Classes() {
                         return <li>{student.name}</li>;
                       })}
                     </ul>
-                    <button style={{ marginTop: "20px" }}>
-                      Generate Template
+                    <button
+                      style={{ marginTop: "20px" }}
+                      onClick={(e) => getStudentNames(e)}
+                    >
+                      Generate Templates
                     </button>
                   </div>
                 );
