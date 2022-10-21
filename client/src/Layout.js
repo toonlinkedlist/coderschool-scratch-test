@@ -7,8 +7,8 @@ function Layout() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route exact path="/" element={<ScratchProj />} />
-        <Route path="/users" element={<Users />} />
+        {/* <Route exact path="/" element={<ScratchProj />} /> */}
+        <Route exact path="/" element={<Users />} />
         <Route path="/classes/:id" element={<Classes />} />
       </Routes>
     </BrowserRouter>

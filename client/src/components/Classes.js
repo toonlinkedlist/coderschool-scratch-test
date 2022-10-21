@@ -8,6 +8,8 @@ function Classes() {
   const [schedule, setSchedule] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [project, setProject] = useState("");
+
   // Get coach's data from staff data
   const staff = staffData.staff_members.map((obj) => ({
     name: obj.name,
@@ -48,13 +50,19 @@ function Classes() {
     return hours + ":" + minutes + " " + ampm;
   }
 
-  const getStudentNames = (e) => {
+  const generateTemplates = (e) => {
     e.preventDefault();
     const studentList = e.target.parentElement.childNodes[1].childNodes;
-    let students = [];
+    let allNames = [];
 
     studentList.forEach((student) => {
-      console.log(student.innerHTML);
+      allNames.push(student.innerHTML);
+    });
+
+    console.log(allNames);
+
+    axios.post("/api/scratch/create-templates", { allNames }).then((res) => {
+      console.log(res);
     });
   };
 
@@ -64,15 +72,6 @@ function Classes() {
 
   return (
     <>
-      {/* {loading ? (
-        <div>
-          <h2>Today's Classes</h2>
-        </div>
-      ) : (
-        <div>
-          <h2>Today's Classes</h2>
-        </div>
-      )} */}
       <div
         style={{
           width: "100%",
@@ -95,22 +94,43 @@ function Classes() {
         >
           <h2>Coach {coach.name}</h2>
           <button
-            style={{ width: "150px", height: "50px" }}
+            style={{ width: "200px", height: "30px" }}
             onClick={(e) => onSubmit(e)}
           >
             Get today's classes
           </button>
         </div>
 
+        <div
+          style={{
+            marginTop: "10px",
+            width: "400px",
+            display: "flex",
+            justifyContent: "space-evenly",
+          }}
+        >
+          <span>Project Link:</span>
+          <input
+            type="text"
+            value={project}
+            onChange={(e) => setProject(e.target.value)}
+            placeholder="Enter project link"
+            style={{ marginBottom: "10px", width: "250px" }}
+          ></input>
+        </div>
+
         {schedule.length > 0 ? (
           <div
             style={{
-              width: "100%",
+              width: "300px",
               height: "100%",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
               flexDirection: "row",
+              border: "1px solid black",
+              borderRadius: "8px",
+              marginTop: "30px",
             }}
           >
             <ul style={{ padding: 0 }}>
@@ -135,9 +155,10 @@ function Classes() {
                         return <li>{student.name}</li>;
                       })}
                     </ul>
+
                     <button
                       style={{ marginTop: "20px" }}
-                      onClick={(e) => getStudentNames(e)}
+                      onClick={(e) => generateTemplates(e)}
                     >
                       Generate Templates
                     </button>

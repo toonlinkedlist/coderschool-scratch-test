@@ -65,14 +65,67 @@ const getDateRange = () => {
 };
 
 // @route POST /api/scratch/create
-// @desc Create Scratch project
+// @desc Create Scratch project; example for 1 student
 // @access Public
 router.post("/create", async (req, res) => {
   try {
     const fullName = req.body.fullName;
+    const project = req.body.project;
     let userCredentials = getCredentials(fullName);
 
     const createTemplate = async () => {
+      const browser = await puppeteer.launch({
+        headless: false,
+        args: ["--single-process", "--no-sandbox", "--disable-setuid-sandbox"],
+      });
+
+      const page = await browser.newPage();
+      await page.setViewport({ width: 1366, height: 768 });
+
+      await page.goto("https://scratch.mit.edu", { waitUntil: "networkidle2" });
+      await page.click(".ignore-react-onclickoutside");
+      await page.type("input[name=username]", userCredentials.username);
+      await page.type("input[name=password]", userCredentials.password);
+      await page.keyboard.press("Enter");
+
+      const page2 = await browser.newPage();
+      await page2.setViewport({ width: 1366, height: 768 });
+      await page2.goto(project, {
+        waitUntil: "networkidle2",
+      });
+
+      await page2.click(".remix-button", {
+        waitUntil: "networkidle0",
+      });
+
+      await delay(1000);
+      await browser.close();
+    };
+
+    await createTemplate();
+
+    return res.json("Template created");
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err.message);
+  }
+});
+
+// @route POST /api/scratch/create-schedules
+// @desc Create Scratch project
+// @access Public
+router.post("/create-templates", async (req, res) => {
+  try {
+    const allNames = req.body.allNames;
+    let allCredentials = [];
+
+    allNames.forEach((name) => {
+      allCredentials.push(getCredentials(name));
+    });
+
+    console.log(allCredentials);
+
+    const createTemplate = async (userCredentials) => {
       const browser = await puppeteer.launch({
         headless: false,
         args: ["--single-process", "--no-sandbox", "--disable-setuid-sandbox"],
@@ -101,9 +154,12 @@ router.post("/create", async (req, res) => {
       await browser.close();
     };
 
-    await createTemplate();
+    for await (const credentials of allCredentials) {
+      await createTemplate(credentials);
+    }
+    // await createTemplate();
 
-    return res.json("Template created");
+    return res.json("Templates created");
   } catch (err) {
     console.log(err);
     res.status(500).send(err.message);
